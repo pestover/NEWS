@@ -14,7 +14,9 @@ const getNews = async() =>{
         let header = new Headers({
             'x-api-key': 'K0Giy7zYXo3kEyTOILE9nnkd6aI9e8Qr9yElQtvpFX8'
         });
-    
+        
+        url.searchParams.set('page', page);
+
         let response = await fetch(url,{headers:header});
         let data = await response.json();
         if(response.status == 200){
@@ -93,11 +95,30 @@ const pagenation = () =>{
     let last = pageGroup*5;
     let first = last - 4;
 
+    pagenationHTML = `<li class="page-item">
+    <a class="page-link" href="#" aria-label="Previous" onclick="moveToPage(${page-1})">
+      <span aria-hidden="true">&lt;</span>
+    </a>
+   </li>`;
+
     for(let i=first;i<=last;i++){
-        pagenationHTML += `<li class="page-item"><a class="page-link" href="#">${i}</a></li>`;
+        pagenationHTML += `<li class="page-item ${page==i?"active":""}>
+        <a class="page-link" href="#" onclick="moveToPage(${i})">${i}</a></li>`;
     }
 
+    pagenationHTML += `<li class="page-item">
+    <a class="page-link" href="#" aria-label="Next" onclick="moveToPage(${page+1})">
+      <span aria-hidden="true">&gt;</span>
+    </a>
+    </li>`;
+
     document.querySelector(".pagenation").innerHTML = pagenationHTML;
+};
+
+
+const moveToPage = (pageNum) =>{
+    page = pageNum;
+    getNews
 };
 
 
